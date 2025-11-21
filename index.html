@@ -1,276 +1,687 @@
-import React, { useState, useEffect } from 'react';
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grimório Visceral das Pombagiras</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-const pombagiras = [
-  {
-    nome: "Maria Padilha",
-    titulo: "Rainha das Encruzilhadas",
-    descricao: "A mais famosa das Pombagiras, nascida em 1334 na Espanha como Maria de Padilla. Sedutora e feiticeira, conquistou o coração do Rei Pedro I de Castela. Comanda a falange principal e é invocada para questões de amor, poder e proteção.",
-    dominio: "Amor, Sedução, Magia",
-    oferendas: "Champanhe, rosas vermelhas, cidra, perfumes finos",
-    video: "https://youtu.be/3_hAUakw8kY",
-    cor: "#8B0000"
-  },
-  {
-    nome: "Maria Molambo",
-    titulo: "Senhora dos Desvalidos",
-    descricao: "Conhecida como a Pombagira dos humildes e marginalizados. Trabalha com transformação de energias negativas e proteção dos desamparados. Sua força vem da superação e da resistência.",
-    dominio: "Proteção, Transformação, Cura",
-    oferendas: "Vinho tinto, flores do campo, velas bicolores",
-    video: "https://youtu.be/t7wzf_bic80",
-    cor: "#4A0E0E"
-  },
-  {
-    nome: "Pombagira Sete Saias",
-    titulo: "Dama da Elegância",
-    descricao: "Representa a sensualidade refinada e o poder feminino em sua expressão mais elegante. Suas sete saias simbolizam os sete caminhos e as sete virtudes. Trabalha com autoestima e magnetismo pessoal.",
-    dominio: "Beleza, Confiança, Atração",
-    oferendas: "Licor de anis, rosas, tecidos vermelhos, bijuterias",
-    video: "https://youtu.be/4SN00P-BS3U",
-    cor: "#722F37"
-  },
-  {
-    nome: "Pombagira da Praia",
-    titulo: "Senhora das Águas Salgadas",
-    descricao: "Liga-se às forças de Iemanjá e trabalha nas fronteiras entre terra e mar. Auxilia em limpezas espirituais profundas e renovação emocional. Traz a força das marés para transformar situações.",
-    dominio: "Purificação, Emoções, Renovação",
-    oferendas: "Champanhe, flores brancas e vermelhas, perfumes",
-    video: "https://youtu.be/iprg-CBJtt0",
-    cor: "#800020"
-  },
-  {
-    nome: "Pombagira das Almas",
-    titulo: "Guardiã dos Portais",
-    descricao: "Trabalha nos cemitérios e portais entre mundos. Especialista em desapego, encerramento de ciclos e comunicação com ancestrais. Ajuda a transformar dor em sabedoria.",
-    dominio: "Desapego, Ancestralidade, Transformação",
-    oferendas: "Vinho, velas pretas e vermelhas, cravos",
-    video: "https://youtu.be/zCX1TF8IPZw",
-    cor: "#1C1C1C"
-  },
-  {
-    nome: "Rosa Caveira",
-    titulo: "Senhora da Calunga",
-    descricao: "Uma das mais poderosas Pombagiras que trabalha com as forças da morte e renascimento. Desfaz trabalhos pesados e protege contra inimigos ocultos. Sua energia é intensa e transformadora.",
-    dominio: "Proteção, Justiça, Quebra de Demandas",
-    oferendas: "Bebidas fortes, rosas negras, velas vermelhas",
-    video: "https://youtu.be/S3LT3Ozzt2k",
-    cor: "#2F0909"
-  },
-  {
-    nome: "Dama da Noite",
-    titulo: "Rainha da Madrugada",
-    descricao: "Manifesta-se nas horas mais profundas da noite. Conhece todos os segredos e mistérios noturnos. Trabalha com sonhos, intuição e revelação de verdades ocultas.",
-    dominio: "Mistérios, Sonhos, Revelações",
-    oferendas: "Champanhe, jasmins, velas perfumadas",
-    video: "https://youtu.be/nlQ7Jh5yccI",
-    cor: "#0D0D0D"
-  },
-  {
-    nome: "Pombagira Cigana",
-    titulo: "Senhora da Liberdade",
-    descricao: "Carrega a energia nômade e livre dos povos ciganos. Especialista em leitura de destinos, prosperidade e liberdade. Ajuda a romper amarras e encontrar novos caminhos.",
-    dominio: "Liberdade, Prosperidade, Destino",
-    oferendas: "Frutas, moedas, lenços coloridos, vinho",
-    video: "https://youtu.be/YX38d26TDRk",
-    cor: "#B8860B"
-  },
-  {
-    nome: "Pombagira Rainha",
-    titulo: "Soberana das Pombagiras",
-    descricao: "Representa a realeza e o poder supremo feminino. Trabalha em causas de grande importância e decisões cruciais. Sua autoridade é reconhecida em todas as falanges.",
-    dominio: "Poder, Autoridade, Grandes Causas",
-    oferendas: "Champanhe fino, joias, rosas importadas",
-    video: "https://youtu.be/vU5NXfXAPTM",
-    cor: "#8B0000"
-  },
-  {
-    nome: "Maria Quitéria",
-    titulo: "Guerreira das Encruzilhadas",
-    descricao: "Pombagira de espírito guerreiro e combativo. Protege mulheres em situações de perigo e luta contra injustiças. Sua força é a coragem e a determinação inabaláveis.",
-    dominio: "Coragem, Proteção, Justiça",
-    oferendas: "Cachaça, charutos, flores vermelhas",
-    video: "https://youtu.be/qYF2w3Mwp3g",
-    cor: "#5C0000"
-  }
-];
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(180deg, #0a0000 0%, #1a0000 50%, #0a0000 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
 
-export default function GrimorioPombagiras() {
-  const [selected, setSelected] = useState(null);
-  const [showIntro, setShowIntro] = useState(true);
-  const [flames, setFlames] = useState([]);
+        /* Animações */
+        @keyframes rise {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100vh) scale(0.5);
+                opacity: 0;
+            }
+        }
 
-  useEffect(() => {
-    const newFlames = Array.from({ length: 20 }, (_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      delay: Math.random() * 3,
-      duration: 2 + Math.random() * 2,
-      size: 10 + Math.random() * 20
-    }));
-    setFlames(newFlames);
-  }, []);
+        @keyframes pulse {
+            0%, 100% {
+                text-shadow: 0 0 20px #ff0000, 0 0 40px #8b0000;
+            }
+            50% {
+                text-shadow: 0 0 40px #ff4500, 0 0 80px #ff0000;
+            }
+        }
 
-  const getVideoEmbed = (url) => {
-    const id = url.split('/').pop();
-    return `https://www.youtube.com/embed/${id}`;
-  };
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px #ff0000, 0 0 40px #ff4500;
+            }
+            50% {
+                box-shadow: 0 0 40px #ff4500, 0 0 60px #8b0000;
+            }
+        }
 
-  if (showIntro) {
-    return (
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center p-4 relative overflow-hidden">
-        {flames.map(f => (
-          <div
-            key={f.id}
-            className="absolute rounded-full opacity-60"
-            style={{
-              left: `${f.left}%`,
-              bottom: '-20px',
-              width: f.size,
-              height: f.size * 2,
-              background: 'linear-gradient(to top, #ff4500, #ff0000, #8b0000, transparent)',
-              animation: `rise ${f.duration}s ease-in-out ${f.delay}s infinite`,
-              filter: 'blur(2px)'
-            }}
-          />
-        ))}
-        <style>{`
-          @keyframes rise { 0%{transform:translateY(0) scale(1);opacity:0.8} 100%{transform:translateY(-100vh) scale(0.5);opacity:0} }
-          @keyframes pulse { 0%,100%{text-shadow:0 0 20px #ff0000,0 0 40px #8b0000} 50%{text-shadow:0 0 40px #ff4500,0 0 80px #ff0000} }
-          @keyframes glow { 0%,100%{box-shadow:0 0 20px #ff0000} 50%{box-shadow:0 0 40px #ff4500,0 0 60px #8b0000} }
-        `}</style>
-        <div className="text-center z-10">
-          <h1 
-            className="text-5xl md:text-7xl font-bold mb-4"
-            style={{ 
-              color: '#ff0000', 
-              fontFamily: 'serif',
-              animation: 'pulse 2s ease-in-out infinite',
-              textShadow: '0 0 30px #8b0000'
-            }}
-          >
-            GRIMÓRIO
-          </h1>
-          <h2 
-            className="text-3xl md:text-5xl mb-8"
-            style={{ color: '#ffd700', fontFamily: 'serif' }}
-          >
-            das Pombagiras
-          </h2>
-          <p className="text-gray-300 text-lg mb-2 max-w-md mx-auto">
-            Adentre os mistérios sagrados das Guardiãs das Encruzilhadas
-          </p>
-          <p className="text-red-400 text-sm mb-8 italic">
-            "Laroyê, Pombagira! Pombagira é Mojubá!"
-          </p>
-          <button
-            onClick={() => setShowIntro(false)}
-            className="px-8 py-4 text-xl font-bold rounded-lg transition-all duration-300 transform hover:scale-105"
-            style={{ 
-              background: 'linear-gradient(135deg, #8b0000, #ff0000, #8b0000)',
-              color: '#ffd700',
-              border: '2px solid #ffd700',
-              animation: 'glow 2s ease-in-out infinite'
-            }}
-          >
-            ⚜ ABRIR O GRIMÓRIO ⚜
-          </button>
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Tela de Introdução */
+        .intro-screen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .intro-screen.hidden {
+            display: none;
+        }
+
+        .flame {
+            position: absolute;
+            bottom: -20px;
+            border-radius: 50%;
+            opacity: 0.6;
+            background: linear-gradient(to top, #ff4500, #ff0000, #8b0000, transparent);
+            filter: blur(2px);
+        }
+
+        .intro-content {
+            text-align: center;
+            z-index: 10;
+            padding: 2rem;
+            border-radius: 1rem;
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7), 0 0 30px rgba(255, 69, 0, 0.5);
+            border: 3px solid #8b0000;
+        }
+
+        .intro-content h1 {
+            font-size: 4rem;
+            color: #ff0000;
+            animation: pulse 2s ease-in-out infinite;
+            text-shadow: 0 0 30px #8b0000;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .intro-content h2 {
+            font-size: 2.5rem;
+            color: #ffd700;
+            margin-bottom: 2rem;
+            font-weight: bold;
+        }
+
+        .intro-content p {
+            font-size: 1.1rem;
+            color: #ff0000;
+            margin-bottom: 1rem;
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        .intro-content .subtitle {
+            font-size: 1rem;
+            color: #ffd700;
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .intro-btn {
+            padding: 1rem 2rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 50px;
+            border: 4px solid #ffd700;
+            background: linear-gradient(135deg, #8b0000, #ff4500, #ff0000, #8b0000);
+            color: #ffe066;
+            cursor: pointer;
+            animation: heartbeat 1s ease-in-out infinite, glow 2s ease-in-out infinite;
+            transition: all 0.3s ease;
+        }
+
+        .intro-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px #ff0000, 0 0 60px #ff4500;
+        }
+
+        /* Tela Principal */
+        .main-screen {
+            display: none;
+            min-height: 100vh;
+            padding: 2rem;
+            background: linear-gradient(180deg, #0a0000 0%, #1a0000 50%, #0a0000 100%);
+        }
+
+        .main-screen.active {
+            display: block;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .main-header h1 {
+            font-size: 3rem;
+            color: #ff0000;
+            text-shadow: 0 0 20px #8b0000;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .main-header p {
+            font-size: 1.2rem;
+            color: #ffd700;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+        }
+
+        .card {
+            padding: 1.5rem;
+            border-radius: 1rem;
+            border: 4px solid #ff0000;
+            background: linear-gradient(135deg, var(--card-color), #0a0000);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+            text-align: center;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.9);
+        }
+
+        .card-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .card h3 {
+            font-size: 1rem;
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .card p {
+            font-size: 0.8rem;
+            color: #ff6b6b;
+            font-style: italic;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-index {
+            font-size: 0.7rem;
+            color: #ff9999;
+            font-family: monospace;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(139, 0, 0, 0.3);
+            border: 4px solid #ffd700;
+        }
+
+        .footer p {
+            font-size: 1rem;
+            color: #ccc;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .footer .quote {
+            font-size: 1.2rem;
+            color: #ffd700;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        /* Tela de Detalhes */
+        .detail-screen {
+            display: none;
+            min-height: 100vh;
+            padding: 2rem;
+            background: linear-gradient(180deg, #0a0000 0%, var(--detail-color) 50%, #0a0000 100%);
+        }
+
+        .detail-screen.active {
+            display: block;
+        }
+
+        .back-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: 2px solid #ffd700;
+            background: rgba(139, 0, 0, 0.8);
+            color: #ffd700;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #ff0000;
+        }
+
+        .detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .detail-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .detail-header h1 {
+            font-size: 3rem;
+            color: #ff0000;
+            text-shadow: 0 0 20px #8b0000;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .detail-header p {
+            font-size: 1.5rem;
+            color: #ffd700;
+            font-style: italic;
+        }
+
+        .video-container {
+            border-radius: 1rem;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            border: 5px solid #ff0000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7), 0 0 30px rgba(255, 69, 0, 0.5);
+        }
+
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .detail-content {
+            border-radius: 1rem;
+            padding: 2rem;
+            background: rgba(0, 0, 0, 0.8);
+            border: 3px solid #8b0000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+        }
+
+        .detail-section {
+            margin-bottom: 2rem;
+        }
+
+        .detail-section h3 {
+            font-size: 1.8rem;
+            color: #ffd700;
+            border-bottom: 2px solid #ff0000;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .detail-section p {
+            font-size: 1rem;
+            color: #ccc;
+            line-height: 1.8;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .detail-box {
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border: 2px solid #ff4500;
+            background: rgba(139, 0, 0, 0.5);
+        }
+
+        .detail-box h4 {
+            font-size: 1.3rem;
+            color: #ff4500;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .detail-box p {
+            font-size: 1rem;
+            color: #ccc;
+        }
+
+        .quote-box {
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            border: 4px solid #ffd700;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.3), transparent);
+            margin-top: 2rem;
+        }
+
+        .quote-box p {
+            font-size: 1.5rem;
+            color: #ffd700;
+            font-weight: bold;
+            font-style: italic;
+            text-shadow: 0 0 10px #ff0000;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .intro-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .intro-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .intro-btn {
+                font-size: 1rem;
+                padding: 0.75rem 1.5rem;
+            }
+
+            .main-header h1 {
+                font-size: 2rem;
+            }
+
+            .detail-header h1 {
+                font-size: 2rem;
+            }
+
+            .grid-container {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .intro-content {
+                padding: 1rem;
+            }
+
+            .intro-content h1 {
+                font-size: 2rem;
+            }
+
+            .intro-content h2 {
+                font-size: 1.2rem;
+            }
+
+            .main-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .detail-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Introdução -->
+    <div class="intro-screen" id="introScreen">
+        <div class="intro-content">
+            <h1>GRIMÓRIO</h1>
+            <h2>das Pombagiras</h2>
+            <p>"Laroyê, Pombagira! Pombagira é Mojubá!"</p>
+            <p class="subtitle">Adentre o portal de fogo e paixão. O conhecimento é a chave.</p>
+            <button class="intro-btn" onclick="openGrimorio()">🔥 ABRIR O GRIMÓRIO VISCERAL 🔥</button>
         </div>
-        <div className="absolute bottom-4 text-gray-600 text-xs">
-          Conhecimento Sagrado da Umbanda
-        </div>
-      </div>
-    );
-  }
-
-  if (selected !== null) {
-    const p = pombagiras[selected];
-    return (
-      <div className="min-h-screen p-4" style={{ background: `linear-gradient(180deg, #0a0000 0%, ${p.cor} 50%, #0a0000 100%)` }}>
-        <button
-          onClick={() => setSelected(null)}
-          className="mb-4 px-4 py-2 rounded-lg flex items-center gap-2 transition-all hover:scale-105"
-          style={{ background: 'rgba(139,0,0,0.5)', color: '#ffd700', border: '1px solid #ffd700' }}
-        >
-          ← Voltar ao Grimório
-        </button>
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-6">
-            <h1 className="text-4xl md:text-5xl font-bold mb-2" style={{ color: '#ff0000', textShadow: '0 0 20px #8b0000', fontFamily: 'serif' }}>
-              {p.nome}
-            </h1>
-            <p className="text-xl" style={{ color: '#ffd700' }}>{p.titulo}</p>
-          </div>
-          <div className="rounded-xl overflow-hidden mb-6" style={{ boxShadow: '0 0 30px rgba(255,0,0,0.5)' }}>
-            <div className="aspect-video">
-              <iframe
-                src={getVideoEmbed(p.video)}
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                title={p.nome}
-              />
-            </div>
-          </div>
-          <div className="rounded-xl p-6" style={{ background: 'rgba(0,0,0,0.7)', border: '2px solid #8b0000' }}>
-            <div className="mb-6">
-              <h3 className="text-lg font-bold mb-2" style={{ color: '#ffd700' }}>📜 História & Mistérios</h3>
-              <p className="text-gray-200 leading-relaxed">{p.descricao}</p>
-            </div>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="p-4 rounded-lg" style={{ background: 'rgba(139,0,0,0.3)', border: '1px solid #ff0000' }}>
-                <h4 className="font-bold mb-2" style={{ color: '#ff4500' }}>🔥 Domínios</h4>
-                <p className="text-gray-200">{p.dominio}</p>
-              </div>
-              <div className="p-4 rounded-lg" style={{ background: 'rgba(139,0,0,0.3)', border: '1px solid #ff0000' }}>
-                <h4 className="font-bold mb-2" style={{ color: '#ff4500' }}>🌹 Oferendas</h4>
-                <p className="text-gray-200">{p.oferendas}</p>
-              </div>
-            </div>
-            <div className="mt-6 p-4 rounded-lg text-center" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,0,0,0.2), transparent)' }}>
-              <p className="text-xl italic" style={{ color: '#ffd700' }}>
-                "Laroyê, {p.nome}!"
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen p-4" style={{ background: 'linear-gradient(180deg, #0a0000 0%, #1a0000 50%, #0a0000 100%)' }}>
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold mb-2" style={{ color: '#ff0000', textShadow: '0 0 20px #8b0000', fontFamily: 'serif' }}>
-          GRIMÓRIO SAGRADO
-        </h1>
-        <p style={{ color: '#ffd700' }}>Toque em uma Pombagira para conhecer seus mistérios</p>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 max-w-6xl mx-auto">
-        {pombagiras.map((p, i) => (
-          <button
-            key={i}
-            onClick={() => setSelected(i)}
-            className="p-4 rounded-xl transition-all duration-300 transform hover:scale-105 text-center group"
-            style={{
-              background: `linear-gradient(135deg, ${p.cor}, #0a0000)`,
-              border: '2px solid #8b0000',
-              boxShadow: '0 4px 15px rgba(139,0,0,0.5)'
-            }}
-          >
-            <div className="text-4xl mb-2 group-hover:animate-pulse">🌹</div>
-            <h3 className="text-sm font-bold mb-1" style={{ color: '#ffd700' }}>{p.nome}</h3>
-            <p className="text-xs" style={{ color: '#ff6b6b' }}>{p.titulo}</p>
-          </button>
-        ))}
-      </div>
-      <div className="text-center mt-8 p-4 rounded-xl max-w-2xl mx-auto" style={{ background: 'rgba(139,0,0,0.2)', border: '1px solid #8b0000' }}>
-        <p className="text-gray-300 text-sm mb-2">
-          As Pombagiras são entidades de luz que trabalham com amor, proteção e transformação. 
-          Representam o feminino livre e poderoso na Umbanda.
-        </p>
-        <p className="italic text-xs" style={{ color: '#ffd700' }}>
-          "Pombagira é força, é cura, é liberdade"
-        </p>
-      </div>
     </div>
-  );
-}
+
+    <!-- Tela Principal -->
+    <div class="main-screen" id="mainScreen">
+        <div class="main-header">
+            <h1>GRIMÓRIO SAGRADO</h1>
+            <p>Toque em uma Guardiã para adentrar seus mistérios e a ordem cronológica de seu conhecimento</p>
+        </div>
+        <div class="grid-container" id="gridContainer"></div>
+        <div class="footer">
+            <p>As Pombagiras são entidades de luz que trabalham com amor, proteção e transformação. Representam o feminino livre e poderoso na Umbanda.</p>
+            <p class="quote">"Pombagira é força, é cura, é liberdade. Salve a força da mulher!"</p>
+        </div>
+    </div>
+
+    <!-- Tela de Detalhes -->
+    <div class="detail-screen" id="detailScreen">
+        <button class="back-btn" onclick="backToGrid()">← Voltar ao Grimório</button>
+        <div class="detail-container">
+            <div class="detail-header">
+                <h1 id="detailName"></h1>
+                <p id="detailTitle"></p>
+            </div>
+            <div class="video-container">
+                <div class="video-wrapper">
+                    <iframe id="videoFrame" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                </div>
+            </div>
+            <div class="detail-content">
+                <div class="detail-section">
+                    <h3>📜 História & Mistérios</h3>
+                    <p id="detailDescription"></p>
+                </div>
+                <div class="detail-grid">
+                    <div class="detail-box">
+                        <h4>🔥 Domínios</h4>
+                        <p id="detailDominio"></p>
+                    </div>
+                    <div class="detail-box">
+                        <h4>🌹 Oferendas</h4>
+                        <p id="detailOferendas"></p>
+                    </div>
+                </div>
+                <div class="quote-box">
+                    <p id="detailQuote"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados das Pombagiras em ordem cronológica
+        const pombagiras = [
+            {
+                nome: "Maria Padilha",
+                titulo: "Rainha das Encruzilhadas",
+                descricao: "A mais famosa das Pombagiras, nascida em 1334 na Espanha como Maria de Padilla. Sedutora e feiticeira, conquistou o coração do Rei Pedro I de Castela. Comanda a falange principal e é invocada para questões de amor, poder e proteção.",
+                dominio: "Amor, Sedução, Magia",
+                oferendas: "Champanhe, rosas vermelhas, cidra, perfumes finos",
+                video: "https://www.youtube.com/embed/3_hAUakw8kY",
+                cor: "#8B0000"
+            },
+            {
+                nome: "Maria Molambo",
+                titulo: "Senhora dos Desvalidos",
+                descricao: "Conhecida como a Pombagira dos humildes e marginalizados. Trabalha com transformação de energias negativas e proteção dos desamparados. Sua força vem da superação e da resistência.",
+                dominio: "Proteção, Transformação, Cura",
+                oferendas: "Vinho tinto, flores do campo, velas bicolores",
+                video: "https://www.youtube.com/embed/t7wzf_bic80",
+                cor: "#4A0E0E"
+            },
+            {
+                nome: "Pombagira Sete Saias",
+                titulo: "Dama da Elegância",
+                descricao: "Representa a sensualidade refinada e o poder feminino em sua expressão mais elegante. Suas sete saias simbolizam os sete caminhos e as sete virtudes. Trabalha com autoestima e magnetismo pessoal.",
+                dominio: "Beleza, Confiança, Atração",
+                oferendas: "Licor de anis, rosas, tecidos vermelhos, bijuterias",
+                video: "https://www.youtube.com/embed/4SN00P-BS3U",
+                cor: "#722F37"
+            },
+            {
+                nome: "Pombagira da Praia",
+                titulo: "Senhora das Águas Salgadas",
+                descricao: "Liga-se às forças de Iemanjá e trabalha nas fronteiras entre terra e mar. Auxilia em limpezas espirituais profundas e renovação emocional. Traz a força das marés para transformar situações.",
+                dominio: "Purificação, Emoções, Renovação",
+                oferendas: "Champanhe, flores brancas e vermelhas, perfumes",
+                video: "https://www.youtube.com/embed/iprg-CBJtt0",
+                cor: "#800020"
+            },
+            {
+                nome: "Pombagira das Almas",
+                titulo: "Guardiã dos Portais",
+                descricao: "Trabalha nos cemitérios e portais entre mundos. Especialista em desapego, encerramento de ciclos e comunicação com ancestrais. Ajuda a transformar dor em sabedoria.",
+                dominio: "Desapego, Ancestralidade, Transformação",
+                oferendas: "Vinho, velas pretas e vermelhas, cravos",
+                video: "https://www.youtube.com/embed/zCX1TF8IPZw",
+                cor: "#1C1C1C"
+            },
+            {
+                nome: "Rosa Caveira",
+                titulo: "Senhora da Calunga",
+                descricao: "Uma das mais poderosas Pombagiras que trabalha com as forças da morte e renascimento. Desfaz trabalhos pesados e protege contra inimigos ocultos. Sua energia é intensa e transformadora.",
+                dominio: "Proteção, Justiça, Quebra de Demandas",
+                oferendas: "Bebidas fortes, rosas negras, velas vermelhas",
+                video: "https://www.youtube.com/embed/S3LT3Ozzt2k",
+                cor: "#2F0909"
+            },
+            {
+                nome: "Dama da Noite",
+                titulo: "Rainha da Madrugada",
+                descricao: "Manifesta-se nas horas mais profundas da noite. Conhece todos os segredos e mistérios noturnos. Trabalha com sonhos, intuição e revelação de verdades ocultas.",
+                dominio: "Mistérios, Sonhos, Revelações",
+                oferendas: "Champanhe, jasmins, velas perfumadas",
+                video: "https://www.youtube.com/embed/nlQ7Jh5yccI",
+                cor: "#0D0D0D"
+            },
+            {
+                nome: "Pombagira Cigana",
+                titulo: "Senhora da Liberdade",
+                descricao: "Carrega a energia nômade e livre dos povos ciganos. Especialista em leitura de destinos, prosperidade e liberdade. Ajuda a romper amarras e encontrar novos caminhos.",
+                dominio: "Liberdade, Prosperidade, Destino",
+                oferendas: "Frutas, moedas, lenços coloridos, vinho",
+                video: "https://www.youtube.com/embed/YX38d26TDRk",
+                cor: "#B8860B"
+            },
+            {
+                nome: "Pombagira Rainha",
+                titulo: "Soberana das Pombagiras",
+                descricao: "Representa a realeza e o poder supremo feminino. Trabalha em causas de grande importância e decisões cruciais. Sua autoridade é reconhecida em todas as falanges.",
+                dominio: "Poder, Autoridade, Grandes Causas",
+                oferendas: "Champanhe fino, joias, rosas importadas",
+                video: "https://www.youtube.com/embed/vU5NXfXAPTM",
+                cor: "#8B0000"
+            },
+            {
+                nome: "Maria Quitéria",
+                titulo: "Guerreira das Encruzilhadas",
+                descricao: "Pombagira de espírito guerreiro e combativo. Protege mulheres em situações de perigo e luta contra injustiças. Sua força é a coragem e a determinação inabaláveis.",
+                dominio: "Coragem, Proteção, Justiça",
+                oferendas: "Cachaça, charutos, flores vermelhas",
+                video: "https://www.youtube.com/embed/qYF2w3Mwp3g",
+                cor: "#5C0000"
+            }
+        ];
+
+        let currentIndex = null;
+
+        // Criar chamas na tela de introdução
+        function createFlames() {
+            const introScreen = document.getElementById('introScreen');
+            for (let i = 0; i < 30; i++) {
+                const flame = document.createElement('div');
+                flame.className = 'flame';
+                const left = Math.random() * 100;
+                const delay = Math.random() * 3;
+                const duration = 2 + Math.random() * 2;
+                const size = 15 + Math.random() * 25;
+                
+                flame.style.left = left + '%';
+                flame.style.width = size + 'px';
+                flame.style.height = (size * 2) + 'px';
+                flame.style.animation = `rise ${duration}s ease-in-out ${delay}s infinite`;
+                
+                introScreen.appendChild(flame);
+            }
+        }
+
+        // Abrir Grimório
+        function openGrimorio() {
+            document.getElementById('introScreen').classList.add('hidden');
+            document.getElementById('mainScreen').classList.add('active');
+            renderGrid();
+        }
+
+        // Renderizar grid de Pombagiras
+        function renderGrid() {
+            const grid = document.getElementById('gridContainer');
+            grid.innerHTML = '';
+            
+            pombagiras.forEach((p, i) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.style.setProperty('--card-color', p.cor);
+                card.onclick = () => showDetail(i);
+                card.innerHTML = `
+                    <div class="card-emoji">🌹</div>
+                    <h3>${p.nome}</h3>
+                    <p>${p.titulo}</p>
+                    <div class="card-index">${i + 1}º Vídeo</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Mostrar detalhes
+        function showDetail(index) {
+            currentIndex = index;
+            const p = pombagiras[index];
+            
+            document.getElementById('mainScreen').classList.remove('active');
+            document.getElementById('detailScreen').classList.add('active');
+            document.getElementById('detailScreen').style.setProperty('--detail-color', p.cor);
+            
+            document.getElementById('detailName').textContent = p.nome;
+            document.getElementById('detailTitle').textContent = p.titulo;
+            document.getElementById('detailDescription').textContent = p.descricao;
+            document.getElementById('detailDominio').textContent = p.dominio;
+            document.getElementById('detailOferendas').textContent = p.oferendas;
+            document.getElementById('detailQuote').textContent = `"Laroyê, ${p.nome}! Salve sua força!"`;
+            document.getElementById('videoFrame').src = p.video;
+        }
+
+        // Voltar ao grid
+        function backToGrid() {
+            document.getElementById('detailScreen').classList.remove('active');
+            document.getElementById('mainScreen').classList.add('active');
+        }
+
+        // Inicializar
+        window.addEventListener('DOMContentLoaded', () => {
+            createFlames();
+        });
+    </script>
+</body>
+</html>
