@@ -3,8 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grimório Visceral das Pombagiras</title>
+    <title>ALMA & SANGUE | Grimório Visceral</title>
     <style>
+        :root {
+            --blood: #8a0303;
+            --gold: #d4af37;
+            --black: #050505;
+            --text: #e0e0e0;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,677 +19,606 @@
         }
 
         body {
-            font-family: 'Georgia', serif;
-            background: linear-gradient(180deg, #0a0000 0%, #1a0000 50%, #0a0000 100%);
-            color: #fff;
+            font-family: 'Cinzel', 'Georgia', serif;
+            background-color: var(--black);
+            color: var(--text);
             overflow-x: hidden;
         }
 
-        /* Animações */
+        /* Tipografia Importada (Simulação) */
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400&display=swap');
+
+        /* --- ANIMAÇÕES --- */
+        @keyframes flicker {
+            0%, 100% { opacity: 1; text-shadow: 0 0 10px var(--blood); }
+            50% { opacity: 0.8; text-shadow: 0 0 20px red; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
         @keyframes rise {
-            0% {
-                transform: translateY(0) scale(1);
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(-100vh) scale(0.5);
-                opacity: 0;
-            }
+            0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
         }
 
-        @keyframes pulse {
-            0%, 100% {
-                text-shadow: 0 0 20px #ff0000, 0 0 40px #8b0000;
-            }
-            50% {
-                text-shadow: 0 0 40px #ff4500, 0 0 80px #ff0000;
-            }
-        }
-
-        @keyframes glow {
-            0%, 100% {
-                box-shadow: 0 0 20px #ff0000, 0 0 40px #ff4500;
-            }
-            50% {
-                box-shadow: 0 0 40px #ff4500, 0 0 60px #8b0000;
-            }
-        }
-
-        @keyframes heartbeat {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        /* Tela de Introdução */
+        /* --- TELA DE INTRODUÇÃO --- */
         .intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            min-height: 100vh;
-            background: #000;
-            position: relative;
-            overflow: hidden;
+            align-items: center;
+            z-index: 999;
+            transition: opacity 1s ease;
         }
 
         .intro-screen.hidden {
-            display: none;
+            opacity: 0;
+            pointer-events: none;
         }
 
-        .flame {
+        .embers {
             position: absolute;
-            bottom: -20px;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .ember {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: orangered;
             border-radius: 50%;
-            opacity: 0.6;
-            background: linear-gradient(to top, #ff4500, #ff0000, #8b0000, transparent);
-            filter: blur(2px);
+            box-shadow: 0 0 10px orange;
         }
 
         .intro-content {
+            z-index: 2;
             text-align: center;
-            z-index: 10;
             padding: 2rem;
-            border-radius: 1rem;
-            background: rgba(0, 0, 0, 0.7);
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7), 0 0 30px rgba(255, 69, 0, 0.5);
-            border: 3px solid #8b0000;
+            border: 1px solid var(--blood);
+            background: rgba(10, 0, 0, 0.9);
+            box-shadow: 0 0 50px rgba(138, 3, 3, 0.3);
         }
 
-        .intro-content h1 {
-            font-size: 4rem;
-            color: #ff0000;
-            animation: pulse 2s ease-in-out infinite;
-            text-shadow: 0 0 30px #8b0000;
-            margin-bottom: 1rem;
-            font-weight: bold;
+        .intro-title {
+            font-size: 3.5rem;
+            color: var(--blood);
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            animation: flicker 3s infinite;
+            margin-bottom: 0.5rem;
         }
 
-        .intro-content h2 {
-            font-size: 2.5rem;
-            color: #ffd700;
+        .intro-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--gold);
+            font-size: 1.2rem;
+            letter-spacing: 3px;
             margin-bottom: 2rem;
-            font-weight: bold;
-        }
-
-        .intro-content p {
-            font-size: 1.1rem;
-            color: #ff0000;
-            margin-bottom: 1rem;
-            font-style: italic;
-            font-weight: 600;
-        }
-
-        .intro-content .subtitle {
-            font-size: 1rem;
-            color: #ffd700;
-            margin-bottom: 2rem;
-            font-weight: 500;
         }
 
         .intro-btn {
-            padding: 1rem 2rem;
-            font-size: 1.5rem;
-            font-weight: bold;
-            border-radius: 50px;
-            border: 4px solid #ffd700;
-            background: linear-gradient(135deg, #8b0000, #ff4500, #ff0000, #8b0000);
-            color: #ffe066;
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            padding: 1rem 3rem;
+            font-size: 1.2rem;
             cursor: pointer;
-            animation: heartbeat 1s ease-in-out infinite, glow 2s ease-in-out infinite;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-family: 'Cinzel', serif;
         }
 
         .intro-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 30px #ff0000, 0 0 60px #ff4500;
+            background: var(--blood);
+            border-color: var(--blood);
+            color: white;
+            box-shadow: 0 0 20px var(--blood);
         }
 
-        /* Tela Principal */
+        /* --- TELA PRINCIPAL (GRID) --- */
         .main-screen {
-            display: none;
             min-height: 100vh;
             padding: 2rem;
-            background: linear-gradient(180deg, #0a0000 0%, #1a0000 50%, #0a0000 100%);
+            display: none;
+            background: radial-gradient(circle at center, #1a0505 0%, #000000 100%);
         }
 
         .main-screen.active {
             display: block;
+            animation: fadeIn 1s forwards;
         }
 
-        .main-header {
+        .header {
             text-align: center;
             margin-bottom: 3rem;
+            padding-top: 2rem;
         }
 
-        .main-header h1 {
-            font-size: 3rem;
-            color: #ff0000;
-            text-shadow: 0 0 20px #8b0000;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-
-        .main-header p {
-            font-size: 1.2rem;
-            color: #ffd700;
+        .header h1 {
+            color: var(--gold);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
         }
 
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
             max-width: 1200px;
-            margin: 0 auto 3rem;
+            margin: 0 auto;
         }
 
         .card {
-            padding: 1.5rem;
-            border-radius: 1rem;
-            border: 4px solid #ff0000;
-            background: linear-gradient(135deg, var(--card-color), #0a0000);
+            background: rgba(20, 20, 20, 0.8);
+            border-left: 4px solid var(--card-color);
+            border-radius: 4px;
+            overflow: hidden;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
-            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
         }
 
         .card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.9);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
-        .card-emoji {
-            font-size: 2.5rem;
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03));
+            pointer-events: none;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-category {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--card-color);
+            letter-spacing: 2px;
             margin-bottom: 0.5rem;
-            animation: pulse 2s ease-in-out infinite;
+            display: block;
         }
 
         .card h3 {
-            font-size: 1rem;
-            color: #ffd700;
+            font-size: 1.5rem;
+            color: white;
             margin-bottom: 0.5rem;
-            font-weight: bold;
         }
 
         .card p {
-            font-size: 0.8rem;
-            color: #ff6b6b;
-            font-style: italic;
-            margin-bottom: 0.5rem;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            color: #aaa;
+            line-height: 1.4;
         }
 
-        .card-index {
-            font-size: 0.7rem;
-            color: #ff9999;
-            font-family: monospace;
-            font-weight: bold;
+        .card-footer {
+            margin-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 1rem;
         }
 
-        .footer {
-            text-align: center;
-            padding: 1.5rem;
-            border-radius: 1rem;
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(139, 0, 0, 0.3);
-            border: 4px solid #ffd700;
-        }
-
-        .footer p {
-            font-size: 1rem;
-            color: #ccc;
-            margin-bottom: 1rem;
-            font-weight: 500;
-        }
-
-        .footer .quote {
+        .play-icon {
+            color: var(--card-color);
             font-size: 1.2rem;
-            color: #ffd700;
-            font-style: italic;
-            font-weight: bold;
         }
 
-        /* Tela de Detalhes */
+        /* --- TELA DE DETALHES (PLAYER) --- */
         .detail-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 100;
             display: none;
-            min-height: 100vh;
-            padding: 2rem;
-            background: linear-gradient(180deg, #0a0000 0%, var(--detail-color) 50%, #0a0000 100%);
+            overflow-y: auto;
         }
 
         .detail-screen.active {
             display: block;
         }
 
-        .back-btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 50px;
-            border: 2px solid #ffd700;
-            background: rgba(139, 0, 0, 0.8);
-            color: #ffd700;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 1.5rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 10px #ff0000;
-        }
-
-        .back-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px #ff0000;
-        }
-
-        .detail-container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
         .detail-header {
-            text-align: center;
-            margin-bottom: 2rem;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
         }
 
-        .detail-header h1 {
-            font-size: 3rem;
-            color: #ff0000;
-            text-shadow: 0 0 20px #8b0000;
-            margin-bottom: 0.5rem;
-            font-weight: bold;
-        }
-
-        .detail-header p {
-            font-size: 1.5rem;
-            color: #ffd700;
-            font-style: italic;
+        .back-btn {
+            background: rgba(0,0,0,0.7);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.8rem;
         }
 
         .video-container {
-            border-radius: 1rem;
-            overflow: hidden;
-            margin-bottom: 2rem;
-            border: 5px solid #ff0000;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7), 0 0 30px rgba(255, 69, 0, 0.5);
-        }
-
-        .video-wrapper {
-            position: relative;
             width: 100%;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
+            height: 50vh;
+            background: black;
+            position: relative;
+            box-shadow: 0 10px 50px rgba(138, 3, 3, 0.2);
         }
 
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
+        iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
 
-        .detail-content {
-            border-radius: 1rem;
+        .info-container {
             padding: 2rem;
-            background: rgba(0, 0, 0, 0.8);
-            border: 3px solid #8b0000;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.7);
+            max-width: 800px;
+            margin: 0 auto;
         }
 
-        .detail-section {
-            margin-bottom: 2rem;
-        }
-
-        .detail-section h3 {
-            font-size: 1.8rem;
-            color: #ffd700;
-            border-bottom: 2px solid #ff0000;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1rem;
-            font-weight: bold;
-        }
-
-        .detail-section p {
-            font-size: 1rem;
-            color: #ccc;
-            line-height: 1.8;
-        }
-
-        .detail-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .detail-box {
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            border: 2px solid #ff4500;
-            background: rgba(139, 0, 0, 0.5);
-        }
-
-        .detail-box h4 {
-            font-size: 1.3rem;
-            color: #ff4500;
+        .info-title {
+            font-size: 2.5rem;
+            color: var(--gold);
             margin-bottom: 0.5rem;
-            font-weight: bold;
         }
 
-        .detail-box p {
+        .info-subtitle {
+            color: var(--blood);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 1rem;
+        }
+
+        .info-desc {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.8;
+            color: #ddd;
+            margin-bottom: 2rem;
+        }
+
+        .info-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .meta-box {
+            background: rgba(255,255,255,0.05);
+            padding: 1rem;
+            border-left: 2px solid var(--gold);
+        }
+
+        .meta-label {
+            display: block;
+            color: var(--gold);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+        }
+
+        .meta-value {
+            font-family: 'Montserrat', sans-serif;
             font-size: 1rem;
-            color: #ccc;
         }
 
-        .quote-box {
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            text-align: center;
-            border: 4px solid #ffd700;
-            background: linear-gradient(90deg, transparent, rgba(255, 0, 0, 0.3), transparent);
-            margin-top: 2rem;
-        }
-
-        .quote-box p {
-            font-size: 1.5rem;
-            color: #ffd700;
-            font-weight: bold;
-            font-style: italic;
-            text-shadow: 0 0 10px #ff0000;
-        }
-
-        /* Responsividade */
+        /* Mobile */
         @media (max-width: 768px) {
-            .intro-content h1 {
-                font-size: 2.5rem;
-            }
-
-            .intro-content h2 {
-                font-size: 1.5rem;
-            }
-
-            .intro-btn {
-                font-size: 1rem;
-                padding: 0.75rem 1.5rem;
-            }
-
-            .main-header h1 {
-                font-size: 2rem;
-            }
-
-            .detail-header h1 {
-                font-size: 2rem;
-            }
-
-            .grid-container {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-                gap: 1rem;
-            }
+            .intro-title { font-size: 2.5rem; }
+            .grid-container { grid-template-columns: 1fr; }
+            .info-meta { grid-template-columns: 1fr; }
         }
 
-        @media (max-width: 480px) {
-            .intro-content {
-                padding: 1rem;
-            }
-
-            .intro-content h1 {
-                font-size: 2rem;
-            }
-
-            .intro-content h2 {
-                font-size: 1.2rem;
-            }
-
-            .main-header h1 {
-                font-size: 1.5rem;
-            }
-
-            .detail-header h1 {
-                font-size: 1.5rem;
-            }
-
-            .grid-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
 <body>
-    <!-- Tela de Introdução -->
+
     <div class="intro-screen" id="introScreen">
+        <div class="embers" id="embers"></div>
         <div class="intro-content">
-            <h1>GRIMÓRIO</h1>
-            <h2>das Pombagiras</h2>
-            <p>"Laroyê, Pombagira! Pombagira é Mojubá!"</p>
-            <p class="subtitle">Adentre o portal de fogo e paixão. O conhecimento é a chave.</p>
-            <button class="intro-btn" onclick="openGrimorio()">🔥 ABRIR O GRIMÓRIO VISCERAL 🔥</button>
+            <h1 class="intro-title">ALMA & SANGUE</h1>
+            <p class="intro-subtitle">Grimório Falado das Pombagiras</p>
+            <button class="intro-btn" onclick="enterApp()">Pedir Licença</button>
         </div>
     </div>
 
-    <!-- Tela Principal -->
     <div class="main-screen" id="mainScreen">
-        <div class="main-header">
-            <h1>GRIMÓRIO SAGRADO</h1>
-            <p>Toque em uma Guardiã para adentrar seus mistérios e a ordem cronológica de seu conhecimento</p>
+        <div class="header">
+            <h1>O Acervo Sagrado</h1>
+            <p style="font-family: 'Montserrat'; color: #888;">Escolha sua guia e ouça o chamado.</p>
         </div>
-        <div class="grid-container" id="gridContainer"></div>
-        <div class="footer">
-            <p>As Pombagiras são entidades de luz que trabalham com amor, proteção e transformação. Representam o feminino livre e poderoso na Umbanda.</p>
-            <p class="quote">"Pombagira é força, é cura, é liberdade. Salve a força da mulher!"</p>
-            <p>Todos os direitos reservados - By; Alexia Melusine.</p>
+        <div class="grid-container" id="gridContainer">
+            </div>
+        <div style="text-align: center; margin-top: 3rem; color: #555; font-family: 'Montserrat'; font-size: 0.8rem;">
+            <p>Laroyê. Mojubá. Respeite o Sagrado.</p>
         </div>
     </div>
 
-    <!-- Tela de Detalhes -->
     <div class="detail-screen" id="detailScreen">
-        <button class="back-btn" onclick="backToGrid()">← Voltar ao Grimório</button>
-        <div class="detail-container">
-            <div class="detail-header">
-                <h1 id="detailName"></h1>
-                <p id="detailTitle"></p>
-            </div>
-            <div class="video-container">
-                <div class="video-wrapper">
-                    <iframe id="videoFrame" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+        <div class="detail-header">
+            <button class="back-btn" onclick="closeDetail()">✕ Voltar ao Altar</button>
+        </div>
+        <div class="video-container">
+            <iframe id="youtubePlayer" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+        <div class="info-container">
+            <h1 class="info-title" id="dTitle">Titulo</h1>
+            <h2 class="info-subtitle" id="dSubtitle">Subtitulo</h2>
+            
+            <div class="info-meta">
+                <div class="meta-box">
+                    <span class="meta-label">Domínio</span>
+                    <span class="meta-value" id="dDomain">Amor</span>
+                </div>
+                <div class="meta-box">
+                    <span class="meta-label">Oferenda</span>
+                    <span class="meta-value" id="dOffer">Rosas</span>
                 </div>
             </div>
-            <div class="detail-content">
-                <div class="detail-section">
-                    <h3>📜 História & Mistérios</h3>
-                    <p id="detailDescription"></p>
-                </div>
-                <div class="detail-grid">
-                    <div class="detail-box">
-                        <h4>🔥 Domínios</h4>
-                        <p id="detailDominio"></p>
-                    </div>
-                    <div class="detail-box">
-                        <h4>🌹 Oferendas</h4>
-                        <p id="detailOferendas"></p>
-                    </div>
-                </div>
-                <div class="quote-box">
-                    <p id="detailQuote"></p>
-                </div>
-            </div>
+
+            <p class="info-desc" id="dDesc">Descrição...</p>
         </div>
     </div>
 
     <script>
-        // Dados das Pombagiras em ordem cronológica
-        const pombagiras = [
+        // DADOS VISCERAIS (Preenchidos com seus Links e Roteiros)
+        const grimorio = [
             {
-                nome: "Desmistificando a Pombagira",
-                titulo: "Quem tem fé, tem tudo. Quem não tem, me respeita.",
-                descricao: "A mais famosa das Pombagiras, nascida em 1334 na Espanha como Maria de Padilla. Sedutora e feiticeira, conquistou o coração do Rei Pedro I de Castela. Comanda a falange principal e é invocada para questões de amor, poder e proteção.",
-                dominio: "Amor, Sedução, Magia",
-                oferendas: "Champanhe, rosas vermelhas, cidra, perfumes finos",
-                video: "https://www.youtube.com/embed/3_hAUakw8kY",
-                cor: "#8B0000"
+                id: "3_hAUakw8kY",
+                nome: "Intro: O Despertar",
+                titulo: "O que são Pombagiras?",
+                categoria: "Fundamentos",
+                desc: "Antes de entrar na gira, entenda a força. Pombagira não é demônio, é lei. É a força da natureza feminina que não se curva. Comece por aqui.",
+                dominio: "Conhecimento",
+                oferenda: "Respeito e Mente Aberta",
+                cor: "#333333"
             },
             {
-                nome: "Pombagiras",
-                titulo: "Quebrando os preconceitos",
-                descricao: "Conhecida como a Pombagira dos humildes e marginalizados. Trabalha com transformação de energias negativas e proteção dos desamparados. Sua força vem da superação e da resistência.",
-                dominio: "Proteção, Transformação, Cura",
-                oferendas: "Vinho tinto, flores do campo, velas bicolores",
-                video: "https://www.youtube.com/embed/t7wzf_bic80",
-                cor: "#4A0E0E"
+                id: "t7wzf_bic80",
+                nome: "Maria Padilha",
+                titulo: "Comando e Realeza",
+                categoria: "Fogo",
+                desc: "A Rainha da Lira. Ela não pede, ela manda. Padilha ensina sobre o poder pessoal, a estratégia e como governar a própria vida sem abaixar a cabeça.",
+                dominio: "Sedução, Governo, Feitiço",
+                oferenda: "Champanhe, Rosas Vermelhas, Joias",
+                cor: "#8a0303" // Sangue
             },
             {
-                nome: "Pombagira Maria Padilha",
-                titulo: "Rainha das Encruzilhadas",
-                descricao: "Representa a sensualidade refinada e o poder feminino em sua expressão mais elegante. Suas sete saias simbolizam os sete caminhos e as sete virtudes. Trabalha com autoestima e magnetismo pessoal.",
-                dominio: "Beleza, Confiança, Atração",
-                oferendas: "Licor de anis, rosas, tecidos vermelhos, bijuterias",
-                video: "https://www.youtube.com/embed/4SN00P-BS3U",
-                cor: "#722F37"
+                id: "4SN00P-BS3U",
+                nome: "Maria Mulambo",
+                titulo: "Cura e Humildade",
+                categoria: "Terra",
+                desc: "Do lixo ao luxo. Mulambo é a senhora que cura o coração partido e restaura a dignidade de quem foi humilhado. A alquimia da dor em força.",
+                dominio: "Cura Emocional, Restauração",
+                oferenda: "Vinho Doce, Rosas Sem Espinhos",
+                cor: "#4b0082" // Roxo Profundo
             },
             {
-                nome: "Pombagira Maria Mulambo",
-                titulo: "Alquimia da Dor",
-                descricao: "Liga-se às forças de Iemanjá e trabalha nas fronteiras entre terra e mar. Auxilia em limpezas espirituais profundas e renovação emocional. Traz a força das marés para transformar situações.",
-                dominio: "Purificação, Emoções, Renovação",
-                oferendas: "Champanhe, flores brancas e vermelhas, perfumes",
-                video: "https://www.youtube.com/embed/iprg-CBJtt0",
-                cor: "#800020"
+                id: "iprg-CBJtt0",
+                nome: "Maria Quitéria",
+                titulo: "Guerra e Proteção",
+                categoria: "Aço",
+                desc: "A mulher que foi à guerra. Quitéria é espada, é defesa, é corte. Ela protege contra perseguições e ensina a coragem visceral.",
+                dominio: "Batalha, Proteção, Quebra de Demanda",
+                oferenda: "Cigarrilha, Whisky, Cravo Vermelho",
+                cor: "#2f4f4f" // Chumbo
             },
             {
-                nome: "Pombagira Rosa Caveira",
-                titulo: "A verdade nos Ossos",
-                descricao: "Trabalha nos cemitérios e portais entre mundos. Especialista em desapego, encerramento de ciclos e comunicação com ancestrais. Ajuda a transformar dor em sabedoria.",
-                dominio: "Desapego, Ancestralidade, Transformação",
-                oferendas: "Vinho, velas pretas e vermelhas, cravos",
-                video: "https://www.youtube.com/embed/zCX1TF8IPZw",
-                cor: "#1C1C1C"
+                id: "zCX1TF8IPZw",
+                nome: "Rosa Caveira",
+                titulo: "Justiça e Morte",
+                categoria: "Ossos",
+                desc: "A verdade nua e crua. Rosa Caveira caminha com os mortos para ensinar aos vivos que a vaidade é passageira. A guardiã da evolução.",
+                dominio: "Ancestralidade, Justiça Kármica",
+                oferenda: "Rosas Amarelas, Velas Bicolores",
+                cor: "#000000" // Preto
             },
             {
-                nome: "Pombagira Maria Quitéria",
-                titulo: "A guerreira",
-                descricao: "Uma das mais poderosas Pombagiras que trabalha com as forças da morte e renascimento. Desfaz trabalhos pesados e protege contra inimigos ocultos. Sua energia é intensa e transformadora.",
-                dominio: "Proteção, Justiça, Quebra de Demandas",
-                oferendas: "Bebidas fortes, rosas negras, velas vermelhas",
-                video: "https://www.youtube.com/embed/S3LT3Ozzt2k",
-                cor: "#2F0909"
+                id: "S3LT3Ozzt2k",
+                nome: "Dama da Noite",
+                titulo: "Mistério e Oculto",
+                categoria: "Noite",
+                desc: "O manto estrelado que cobre os segredos. Ela vê o que ninguém vê. A senhora da intuição e dos amores proibidos que florescem no escuro.",
+                dominio: "Segredos, Vidência, Noite",
+                oferenda: "Licor Fino, Rosas Escuras",
+                cor: "#191970" // Azul Meia-Noite
             },
             {
-                nome: "Pombagira Dama da Noite",
-                titulo: "Rainha da Madrugada",
-                descricao: "Manifesta-se nas horas mais profundas da noite. Conhece todos os segredos e mistérios noturnos. Trabalha com sonhos, intuição e revelação de verdades ocultas.",
-                dominio: "Mistérios, Sonhos, Revelações",
-                oferendas: "Champanhe, jasmins, velas perfumadas",
-                video: "https://www.youtube.com/embed/nlQ7Jh5yccI",
-                cor: "#0D0D0D"
+                id: "nlQ7Jh5yccI",
+                nome: "Dona Sete Saias",
+                titulo: "Alegria e Intensidade",
+                categoria: "Vento",
+                desc: "O furacão colorido. Sete Saias gira em sete caminhos para trazer movimento, alegria e tirar você da depressão estagnada.",
+                dominio: "Amor Romântico, Movimento",
+                oferenda: "Fitas Coloridas, Doces",
+                cor: "#c71585" // Rosa Choque
             },
             {
+                id: "YX38d26TDRk",
                 nome: "Pombagira Cigana",
-                titulo: "Senhora da Liberdade",
-                descricao: "Carrega a energia nômade e livre dos povos ciganos. Especialista em leitura de destinos, prosperidade e liberdade. Ajuda a romper amarras e encontrar novos caminhos.",
-                dominio: "Liberdade, Prosperidade, Destino",
-                oferendas: "Frutas, moedas, lenços coloridos, vinho",
-                video: "https://www.youtube.com/embed/YX38d26TDRk",
-                cor: "#B8860B"
+                titulo: "Liberdade e Prosperidade",
+                categoria: "Estrada",
+                desc: "A dona do destino. Com seu baralho e sua música, ela ensina que o ouro brilha para quem tem alma livre. Optchá!",
+                dominio: "Dinheiro, Sorte, Oráculos",
+                oferenda: "Frutas, Moedas, Vinho",
+                cor: "#d4af37" // Dourado
             },
             {
-                nome: "Pombagira Sete Saias",
-                titulo: "Furação de Emoções",
-                descricao: "Representa a realeza e o poder supremo feminino. Trabalha em causas de grande importância e decisões cruciais. Sua autoridade é reconhecida em todas as falanges.",
-                dominio: "Poder, Autoridade, Grandes Causas",
-                oferendas: "Champanhe fino, joias, rosas importadas",
-                video: "https://www.youtube.com/embed/vU5NXfXAPTM",
-                cor: "#8B0000"
+                id: "vU5NXfXAPTM",
+                nome: "Maria Navalha",
+                titulo: "Malandragem e Rua",
+                categoria: "Lapa",
+                desc: "A mestra da sobrevivência. Navalha ensina o jogo de cintura. Para quem precisa se defender na rua e ganhar o pão com esperteza.",
+                dominio: "Negócios, Jogo, Defesa de Rua",
+                oferenda: "Cerveja, Sardinha, Baralho",
+                cor: "#b22222" // Vermelho Tijolo
             },
             {
-                nome: "Pombagira Maria Navalha",
-                titulo: "Lâmina e Luta",
-                descricao: "Pombagira de espírito guerreiro e combativo. Protege mulheres em situações de perigo e luta contra injustiças. Sua força é a coragem e a determinação inabaláveis.",
-                dominio: "Coragem, Proteção, Justiça",
-                oferendas: "Cachaça, charutos, flores vermelhas",
-                video: "https://www.youtube.com/embed/qYF2w3Mwp3g",
-                cor: "#5C0000"
+                id: "qYF2w3Mwp3g",
+                nome: "Pombagira da Praia",
+                titulo: "Emoção e Limpeza",
+                categoria: "Água",
+                desc: "A sereia de preto. O banho de sal grosso da alma. Ela lava as mágoas profundas e leva o mal para o fundo do mar.",
+                dominio: "Limpeza Espiritual, Emoções",
+                oferenda: "Champanhe Branca, Rosas Brancas",
+                cor: "#008b8b" // Ciano Escuro
+            },
+            {
+                id: "Y_s-V-hXQsk",
+                nome: "Maria Farrapo",
+                titulo: "Sanidade e Caos",
+                categoria: "Mental",
+                desc: "A loucura santa. Ela rasga as convenções e costura a sanidade. Para quem está à beira do colapso, Farrapo é o remédio.",
+                dominio: "Saúde Mental, Desobsessão",
+                oferenda: "Cachaça, Fumo",
+                cor: "#800080" // Roxo
+            },
+            {
+                id: "NsPxaDZrs8E",
+                nome: "Pombagira Menina",
+                titulo: "Renovação e Inocência",
+                categoria: "Jardim",
+                desc: "O encanto da juventude. Ela traz o brilho no olhar, a vaidade leve e a renovação para quem se sente cansada da vida.",
+                dominio: "Beleza, Início de Ciclos",
+                oferenda: "Doces Finos, Perfumes Doces",
+                cor: "#ff69b4" // Rosa Bebê
+            },
+            {
+                id: "80dRxkEQ34Y",
+                nome: "Pombagira da Figueira",
+                titulo: "Raiz e Ancestralidade",
+                categoria: "Raiz",
+                desc: "A feiticeira da árvore oca. Sabedoria antiga, cura pelas ervas e a força de quem tem raízes profundas na terra.",
+                dominio: "Fertilidade, Cura, Magia Antiga",
+                oferenda: "Figos, Vinho Tinto, Mel",
+                cor: "#556b2f" // Verde Oliva
+            },
+            {
+                id: "bFpbM5uHric",
+                nome: "Encerramento",
+                titulo: "A Gira Girou",
+                categoria: "Final",
+                desc: "O agradecimento final às Guardiãs. Que a força delas permaneça com você. Laroyê!",
+                dominio: "Gratidão",
+                oferenda: "Uma vela acesa",
+                cor: "#333" 
             }
         ];
 
-        let currentIndex = null;
+        // LÓGICA DO APP
+        const gridContainer = document.getElementById('gridContainer');
+        const detailScreen = document.getElementById('detailScreen');
+        const youtubePlayer = document.getElementById('youtubePlayer');
 
-        // Criar chamas na tela de introdução
-        function createFlames() {
-            const introScreen = document.getElementById('introScreen');
-            for (let i = 0; i < 30; i++) {
-                const flame = document.createElement('div');
-                flame.className = 'flame';
-                const left = Math.random() * 100;
-                const delay = Math.random() * 3;
-                const duration = 2 + Math.random() * 2;
-                const size = 15 + Math.random() * 25;
+        // Gerar Partículas (Embers)
+        function createEmbers() {
+            const container = document.getElementById('embers');
+            const emberCount = 30;
+            
+            for(let i=0; i<emberCount; i++){
+                const ember = document.createElement('div');
+                ember.classList.add('ember');
                 
-                flame.style.left = left + '%';
-                flame.style.width = size + 'px';
-                flame.style.height = (size * 2) + 'px';
-                flame.style.animation = `rise ${duration}s ease-in-out ${delay}s infinite`;
+                // Randomizar posição e animação
+                ember.style.left = Math.random() * 100 + '%';
+                ember.style.animation = `rise ${2 + Math.random() * 3}s linear infinite`;
+                ember.style.animationDelay = Math.random() * 2 + 's';
+                ember.style.opacity = Math.random();
                 
-                introScreen.appendChild(flame);
+                container.appendChild(ember);
             }
         }
 
-        // Abrir Grimório
-        function openGrimorio() {
+        // Entrar no App
+        function enterApp() {
             document.getElementById('introScreen').classList.add('hidden');
             document.getElementById('mainScreen').classList.add('active');
             renderGrid();
         }
 
-        // Renderizar grid de Pombagiras
+        // Renderizar Cards
         function renderGrid() {
-            const grid = document.getElementById('gridContainer');
-            grid.innerHTML = '';
-            
-            pombagiras.forEach((p, i) => {
+            gridContainer.innerHTML = '';
+            grimorio.forEach(item => {
                 const card = document.createElement('div');
-                card.className = 'card';
-                card.style.setProperty('--card-color', p.cor);
-                card.onclick = () => showDetail(i);
+                card.classList.add('card');
+                card.style.setProperty('--card-color', item.cor);
+                card.onclick = () => openDetail(item);
+
                 card.innerHTML = `
-                    <div class="card-emoji">🌹</div>
-                    <h3>${p.nome}</h3>
-                    <p>${p.titulo}</p>
-                    <div class="card-index">${i + 1}º Vídeo</div>
+                    <div class="card-content">
+                        <span class="card-category">${item.categoria}</span>
+                        <h3>${item.nome}</h3>
+                        <p>${item.titulo}</p>
+                        <div class="card-footer">
+                            <span style="font-size: 0.8rem; color: #666;">CLIQUE PARA OUVIR</span>
+                            <span class="play-icon">▶</span>
+                        </div>
+                    </div>
                 `;
-                grid.appendChild(card);
+                gridContainer.appendChild(card);
             });
         }
 
-        // Mostrar detalhes
-        function showDetail(index) {
-            currentIndex = index;
-            const p = pombagiras[index];
+        // Abrir Player
+        function openDetail(item) {
+            detailScreen.classList.add('active');
             
-            document.getElementById('mainScreen').classList.remove('active');
-            document.getElementById('detailScreen').classList.add('active');
-            document.getElementById('detailScreen').style.setProperty('--detail-color', p.cor);
+            // Carregar Textos
+            document.getElementById('dTitle').innerText = item.nome;
+            document.getElementById('dTitle').style.color = item.cor;
+            document.getElementById('dSubtitle').innerText = item.titulo;
+            document.getElementById('dDesc').innerText = item.desc;
+            document.getElementById('dDomain').innerText = item.dominio;
+            document.getElementById('dOffer').innerText = item.oferenda;
             
-            document.getElementById('detailName').textContent = p.nome;
-            document.getElementById('detailTitle').textContent = p.titulo;
-            document.getElementById('detailDescription').textContent = p.descricao;
-            document.getElementById('detailDominio').textContent = p.dominio;
-            document.getElementById('detailOferendas').textContent = p.oferendas;
-            document.getElementById('detailQuote').textContent = `"Laroyê, ${p.nome}! Salve sua força!"`;
-            document.getElementById('videoFrame').src = p.video;
+            // Carregar Vídeo
+            youtubePlayer.src = `https://www.youtube.com/embed/${item.id}?autoplay=1&rel=0&modestbranding=1&controls=1`;
         }
 
-        // Voltar ao grid
-        function backToGrid() {
-            document.getElementById('detailScreen').classList.remove('active');
-            document.getElementById('mainScreen').classList.add('active');
+        // Fechar Player
+        function closeDetail() {
+            detailScreen.classList.remove('active');
+            youtubePlayer.src = ""; // Parar vídeo
         }
 
-        // Inicializar
-        window.addEventListener('DOMContentLoaded', () => {
-            createFlames();
-        });
+        // Iniciar
+        createEmbers();
+
     </script>
 </body>
 </html>
