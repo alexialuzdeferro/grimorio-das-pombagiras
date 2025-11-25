@@ -34,16 +34,15 @@
             50% { opacity: 0.8; text-shadow: 0 0 20px red; }
         }
 
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
         @keyframes rise {
             0% { transform: translateY(100vh) scale(0.5); opacity: 0; }
             50% { opacity: 0.5; }
             100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* --- TELA DE INTRODUÇÃO --- */
@@ -177,17 +176,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03));
-            pointer-events: none;
-        }
-
         .card-content {
             padding: 1.5rem;
         }
@@ -200,6 +188,7 @@
             letter-spacing: 2px;
             margin-bottom: 0.5rem;
             display: block;
+            font-weight: bold;
         }
 
         .card h3 {
@@ -332,16 +321,11 @@
             font-size: 1rem;
         }
 
-        /* Mobile */
+        /* Mobile Responsive */
         @media (max-width: 768px) {
             .intro-title { font-size: 2.5rem; }
             .grid-container { grid-template-columns: 1fr; }
             .info-meta { grid-template-columns: 1fr; }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
         }
     </style>
 </head>
@@ -363,8 +347,9 @@
         </div>
         <div class="grid-container" id="gridContainer">
             </div>
-        <div style="text-align: center; margin-top: 3rem; color: #555; font-family: 'Montserrat'; font-size: 0.8rem;">
+        <div style="text-align: center; margin-top: 3rem; color: #555; font-family: 'Montserrat'; font-size: 0.8rem; padding-bottom: 2rem;">
             <p>Laroyê. Mojubá. Respeite o Sagrado.</p>
+            <p style="margin-top: 5px;">Desenvolvido para Estudos.</p>
         </div>
     </div>
 
@@ -395,13 +380,14 @@
     </div>
 
     <script>
-        // DADOS VISCERAIS (Preenchidos com seus Links e Roteiros)
+        // --- DADOS REVISADOS E CORRIGIDOS ---
+        // A ordem e o mapeamento agora estão 100% alinhados com sua lista
         const grimorio = [
             {
                 id: "3_hAUakw8kY",
                 nome: "Intro: O Despertar",
                 titulo: "O que são Pombagiras?",
-                categoria: "Fundamentos",
+                categoria: "FUNDAMENTOS",
                 desc: "Antes de entrar na gira, entenda a força. Pombagira não é demônio, é lei. É a força da natureza feminina que não se curva. Comece por aqui.",
                 dominio: "Conhecimento",
                 oferenda: "Respeito e Mente Aberta",
@@ -409,9 +395,9 @@
             },
             {
                 id: "t7wzf_bic80",
-                nome: "Desmistificando Pombagira",
+                nome: "Maria Padilha",
                 titulo: "Comando e Realeza",
-                categoria: "Fogo",
+                categoria: "FOGO",
                 desc: "A Rainha da Lira. Ela não pede, ela manda. Padilha ensina sobre o poder pessoal, a estratégia e como governar a própria vida sem abaixar a cabeça.",
                 dominio: "Sedução, Governo, Feitiço",
                 oferenda: "Champanhe, Rosas Vermelhas, Joias",
@@ -419,19 +405,19 @@
             },
             {
                 id: "4SN00P-BS3U",
-                nome: "Pombagira Maria Padilha",
+                nome: "Maria Mulambo",
                 titulo: "Cura e Humildade",
-                categoria: "Terra",
+                categoria: "TERRA",
                 desc: "Do lixo ao luxo. Mulambo é a senhora que cura o coração partido e restaura a dignidade de quem foi humilhado. A alquimia da dor em força.",
                 dominio: "Cura Emocional, Restauração",
                 oferenda: "Vinho Doce, Rosas Sem Espinhos",
-                cor: "#4b0082" // Roxo Profundo
+                cor: "#4b0082" // Roxo
             },
             {
                 id: "iprg-CBJtt0",
-                nome: "Pombagira Maria Mulambo",
+                nome: "Maria Quitéria",
                 titulo: "Guerra e Proteção",
-                categoria: "Aço",
+                categoria: "AÇO",
                 desc: "A mulher que foi à guerra. Quitéria é espada, é defesa, é corte. Ela protege contra perseguições e ensina a coragem visceral.",
                 dominio: "Batalha, Proteção, Quebra de Demanda",
                 oferenda: "Cigarrilha, Whisky, Cravo Vermelho",
@@ -441,27 +427,27 @@
                 id: "zCX1TF8IPZw",
                 nome: "Rosa Caveira",
                 titulo: "Justiça e Morte",
-                categoria: "Ossos",
+                categoria: "OSSOS",
                 desc: "A verdade nua e crua. Rosa Caveira caminha com os mortos para ensinar aos vivos que a vaidade é passageira. A guardiã da evolução.",
                 dominio: "Ancestralidade, Justiça Kármica",
                 oferenda: "Rosas Amarelas, Velas Bicolores",
-                cor: "#000000" // Preto
+                cor: "#000000" // Preto Absoluto
             },
             {
                 id: "S3LT3Ozzt2k",
-                nome: "Pombagira Maria Quitéria",
+                nome: "Dama da Noite",
                 titulo: "Mistério e Oculto",
-                categoria: "Noite",
+                categoria: "NOITE",
                 desc: "O manto estrelado que cobre os segredos. Ela vê o que ninguém vê. A senhora da intuição e dos amores proibidos que florescem no escuro.",
                 dominio: "Segredos, Vidência, Noite",
                 oferenda: "Licor Fino, Rosas Escuras",
-                cor: "#191970" // Azul Meia-Noite
+                cor: "#191970" // Azul Noite
             },
             {
                 id: "nlQ7Jh5yccI",
-                nome: "Pombagira Dama da Noite",
+                nome: "Dona Sete Saias",
                 titulo: "Alegria e Intensidade",
-                categoria: "Vento",
+                categoria: "VENTO",
                 desc: "O furacão colorido. Sete Saias gira em sete caminhos para trazer movimento, alegria e tirar você da depressão estagnada.",
                 dominio: "Amor Romântico, Movimento",
                 oferenda: "Fitas Coloridas, Doces",
@@ -471,7 +457,7 @@
                 id: "YX38d26TDRk",
                 nome: "Pombagira Cigana",
                 titulo: "Liberdade e Prosperidade",
-                categoria: "Estrada",
+                categoria: "ESTRADA",
                 desc: "A dona do destino. Com seu baralho e sua música, ela ensina que o ouro brilha para quem tem alma livre. Optchá!",
                 dominio: "Dinheiro, Sorte, Oráculos",
                 oferenda: "Frutas, Moedas, Vinho",
@@ -479,9 +465,9 @@
             },
             {
                 id: "vU5NXfXAPTM",
-                nome: "Pombagira Sete Saias",
+                nome: "Maria Navalha",
                 titulo: "Malandragem e Rua",
-                categoria: "Lapa",
+                categoria: "LAPA",
                 desc: "A mestra da sobrevivência. Navalha ensina o jogo de cintura. Para quem precisa se defender na rua e ganhar o pão com esperteza.",
                 dominio: "Negócios, Jogo, Defesa de Rua",
                 oferenda: "Cerveja, Sardinha, Baralho",
@@ -489,29 +475,29 @@
             },
             {
                 id: "qYF2w3Mwp3g",
-                nome: "Pombagira Maria Navalha",
+                nome: "Pombagira da Praia",
                 titulo: "Emoção e Limpeza",
-                categoria: "Água",
+                categoria: "ÁGUA",
                 desc: "A sereia de preto. O banho de sal grosso da alma. Ela lava as mágoas profundas e leva o mal para o fundo do mar.",
                 dominio: "Limpeza Espiritual, Emoções",
                 oferenda: "Champanhe Branca, Rosas Brancas",
-                cor: "#008b8b" // Ciano Escuro
+                cor: "#008b8b" // Ciano
             },
             {
                 id: "Y_s-V-hXQsk",
-                nome: "Pombagira da Figueira",
+                nome: "Maria Farrapo",
                 titulo: "Sanidade e Caos",
-                categoria: "Mental",
+                categoria: "MENTAL",
                 desc: "A loucura santa. Ela rasga as convenções e costura a sanidade. Para quem está à beira do colapso, Farrapo é o remédio.",
                 dominio: "Saúde Mental, Desobsessão",
                 oferenda: "Cachaça, Fumo",
-                cor: "#800080" // Roxo
+                cor: "#800080" // Roxo Farrapo
             },
             {
                 id: "NsPxaDZrs8E",
-                nome: "Pombagira da Praia",
+                nome: "Pombagira Menina",
                 titulo: "Renovação e Inocência",
-                categoria: "Jardim",
+                categoria: "JARDIM",
                 desc: "O encanto da juventude. Ela traz o brilho no olhar, a vaidade leve e a renovação para quem se sente cansada da vida.",
                 dominio: "Beleza, Início de Ciclos",
                 oferenda: "Doces Finos, Perfumes Doces",
@@ -519,9 +505,9 @@
             },
             {
                 id: "80dRxkEQ34Y",
-                nome: "Pombagira Maria Farrapo",
+                nome: "Pombagira da Figueira",
                 titulo: "Raiz e Ancestralidade",
-                categoria: "Raiz",
+                categoria: "RAIZ",
                 desc: "A feiticeira da árvore oca. Sabedoria antiga, cura pelas ervas e a força de quem tem raízes profundas na terra.",
                 dominio: "Fertilidade, Cura, Magia Antiga",
                 oferenda: "Figos, Vinho Tinto, Mel",
@@ -529,13 +515,13 @@
             },
             {
                 id: "bFpbM5uHric",
-                nome: "Pombagira Menina",
+                nome: "Encerramento",
                 titulo: "A Gira Girou",
-                categoria: "Final",
+                categoria: "FINAL",
                 desc: "O agradecimento final às Guardiãs. Que a força delas permaneça com você. Laroyê!",
                 dominio: "Gratidão",
                 oferenda: "Uma vela acesa",
-                cor: "#333" 
+                cor: "#333333"
             }
         ];
 
@@ -581,12 +567,12 @@
 
                 card.innerHTML = `
                     <div class="card-content">
-                        <span class="card-category">${item.categoria}</span>
+                        <span class="card-category" style="color:${item.cor}">${item.categoria}</span>
                         <h3>${item.nome}</h3>
                         <p>${item.titulo}</p>
                         <div class="card-footer">
                             <span style="font-size: 0.8rem; color: #666;">CLIQUE PARA OUVIR</span>
-                            <span class="play-icon">▶</span>
+                            <span class="play-icon" style="color:${item.cor}">▶</span>
                         </div>
                     </div>
                 `;
@@ -606,7 +592,7 @@
             document.getElementById('dDomain').innerText = item.dominio;
             document.getElementById('dOffer').innerText = item.oferenda;
             
-            // Carregar Vídeo
+            // Carregar Vídeo do YouTube
             youtubePlayer.src = `https://www.youtube.com/embed/${item.id}?autoplay=1&rel=0&modestbranding=1&controls=1`;
         }
 
@@ -616,7 +602,7 @@
             youtubePlayer.src = ""; // Parar vídeo
         }
 
-        // Iniciar
+        // Iniciar Efeitos
         createEmbers();
 
     </script>
