@@ -321,11 +321,59 @@
             font-size: 1rem;
         }
 
+        /* ESTILO DO CONTADOR DISCRETO */
+        .access-counter {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(44, 62, 80, 0.15);
+            color: rgba(255, 255, 255, 0.4);
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 11px;
+            backdrop-filter: blur(25px);
+            border: 0.5px solid rgba(255, 255, 255, 0.03);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            font-family: 'Montserrat', sans-serif;
+            letter-spacing: 0.3px;
+            transition: all 0.3s ease;
+            max-width: 140px;
+            opacity: 0.5;
+        }
+
+        .access-counter:hover {
+            background: rgba(44, 62, 80, 0.25);
+            color: rgba(255, 255, 255, 0.6);
+            opacity: 1;
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .access-counter::before {
+            content: '📜 ';
+            font-size: 10px;
+            opacity: 0.7;
+        }
+
+        .access-counter.loading {
+            opacity: 0.3;
+        }
+
         /* Mobile Responsive */
         @media (max-width: 768px) {
             .intro-title { font-size: 2.5rem; }
             .grid-container { grid-template-columns: 1fr; }
             .info-meta { grid-template-columns: 1fr; }
+            
+            .access-counter {
+                bottom: 8px;
+                right: 8px;
+                font-size: 10px;
+                padding: 3px 8px;
+            }
         }
     </style>
 </head>
@@ -379,11 +427,126 @@
         </div>
     </div>
 
+    <!-- CONTADOR DE ACESSOS DISCRETO -->
+    <div class="access-counter loading" id="accessCounter">Acessos...</div>
+
     <script>
+        // ========== CONFIGURAÇÃO DO CONTADOR ==========
+        const SUPABASE_URL = 'https://rbygxkbewzknvjjhxdvw.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJieWd4a2Jld3prbnZqamh4ZHZ3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYwMDcxNjQsImV4cCI6MjA4MTU4MzE2NH0.YrHF9HEGo6yv9MyNsPzFgBhaAB1DRh2SLU8f7L6s1nY';
+
+        // ID ÚNICO PARA ESTA PÁGINA (Grimório)
+        const PAGE_ID = 'grimorio-alma-sangue';
+
+        // Função para o contador de acessos
+        async function updateViewCounter() {
+            try {
+                const counterElement = document.getElementById('accessCounter');
+                
+                // 1. Busca o valor atual
+                const currentResponse = await fetch(
+                    `${SUPABASE_URL}/rest/v1/page_views?page=eq.${encodeURIComponent(PAGE_ID)}&select=view_count`,
+                    {
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                            'Content-Type': 'application/json'
+                        }
+                    }
+                );
+                
+                if (!currentResponse.ok) {
+                    throw new Error('Falha ao buscar contador');
+                }
+                
+                const currentData = await currentResponse.json();
+                
+                // Se não existe registro, cria um
+                if (!currentData || currentData.length === 0) {
+                    const createResponse = await fetch(
+                        `${SUPABASE_URL}/rest/v1/page_views`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'apikey': SUPABASE_ANON_KEY,
+                                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'return=representation'
+                            },
+                            body: JSON.stringify({
+                                page: PAGE_ID,
+                                view_count: 1,
+                                updated_at: new Date().toISOString()
+                            })
+                        }
+                    );
+                    
+                    if (createResponse.ok) {
+                        const createdData = await createResponse.json();
+                        const newCount = createdData[0]?.view_count || 1;
+                        counterElement.textContent = `${newCount} estudos`;
+                        counterElement.classList.remove('loading');
+                    } else {
+                        throw new Error('Falha ao criar registro');
+                    }
+                    
+                } else {
+                    // Se existe, incrementa
+                    const currentCount = currentData[0]?.view_count || 0;
+                    const newCount = currentCount + 1;
+                    
+                    const updateResponse = await fetch(
+                        `${SUPABASE_URL}/rest/v1/page_views?page=eq.${encodeURIComponent(PAGE_ID)}`,
+                        {
+                            method: 'PATCH',
+                            headers: {
+                                'apikey': SUPABASE_ANON_KEY,
+                                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                                'Content-Type': 'application/json',
+                                'Prefer': 'return=representation'
+                            },
+                            body: JSON.stringify({
+                                view_count: newCount,
+                                updated_at: new Date().toISOString()
+                            })
+                        }
+                    );
+                    
+                    if (updateResponse.ok) {
+                        const updatedData = await updateResponse.json();
+                        const finalCount = updatedData[0]?.view_count || newCount;
+                        counterElement.textContent = `${finalCount} estudos`;
+                        counterElement.classList.remove('loading');
+                    } else {
+                        throw new Error('Falha ao atualizar contador');
+                    }
+                }
+                
+            } catch (error) {
+                console.log('Erro no contador:', error);
+                
+                // Fallback: contador local no localStorage
+                const counterElement = document.getElementById('accessCounter');
+                let localCount = localStorage.getItem(`views_${PAGE_ID}`);
+                
+                if (localCount === null) {
+                    localCount = '1';
+                } else {
+                    localCount = (parseInt(localCount) + 1).toString();
+                }
+                
+                localStorage.setItem(`views_${PAGE_ID}`, localCount);
+                counterElement.textContent = `${localCount} estudos`;
+                counterElement.classList.remove('loading');
+                counterElement.style.color = 'rgba(255, 255, 255, 0.3)';
+                counterElement.title = 'Contador local (offline)';
+            }
+        }
+
+        // ========== CÓDIGO DO GRIMÓRIO ==========
         // --- DADOS CORRIGIDOS E ALINHADOS COM OS VÍDEOS ---
         const grimorio = [
             {
-               
                 id: "t7wzf_bic80",
                 nome: "Quem são as Pombagiras",
                 titulo: "O Despertar da Força",
@@ -394,8 +557,6 @@
                 cor: "#333333"
             },
             {
-                
-                
                 id: "3_hAUakw8kY",
                 nome: "Desmistificando as Pombagiras",
                 titulo: "O Despertar do Conhecimento",
@@ -616,6 +777,11 @@
 
         // Iniciar Efeitos
         createEmbers();
+        
+        // Iniciar contador quando a página carrega
+        window.onload = function() {
+            updateViewCounter();
+        };
 
     </script>
 </body>
